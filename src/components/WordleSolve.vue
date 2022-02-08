@@ -138,7 +138,7 @@ export default {
                     }
                 );
             }
-            console.log(this.filteredList);
+
             this.setFilteredWords(this.filteredList);
             }
           );
