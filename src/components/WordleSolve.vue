@@ -124,10 +124,21 @@ export default {
           this.correctLetters.forEach(
             (array) => {
               if (this.filteredWords.length > 1) {
-                this.filteredList = this.filteredWords.filter((word) => word.indexOf(array[0]) === array[1]);
+                this.filteredList = this.filteredWords.filter(
+                    (word) => {
+                        const wordSplit = word.split('');
+                        return wordSplit[array[1]] === array[0];
+                    }
+                );
             } else {
-                this.filteredList = this.FiveLetterWords.filter((word) => word.indexOf(array[0]) === array[1]);
+                this.filteredList = this.FiveLetterWords.filter(
+                    (word) => {
+                        const wordSplit = word.split('');
+                        return wordSplit[array[1]] === array[0];
+                    }
+                );
             }
+
             this.setFilteredWords(this.filteredList);
             }
           );
