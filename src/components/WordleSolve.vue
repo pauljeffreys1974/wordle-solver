@@ -158,37 +158,17 @@ export default {
 
             this.correctLetters.forEach(
                 () => {
-                if (this.filteredWords.length > 1) {
-                    this.filteredList = this.filteredWords.filter(
-                        word => this.correctLetters.reduce(
-                            (prev, [letter, index]) => prev && (word[index] === letter), 
-                            true
-                        )
+                this.filteredList = this.filteredWords.filter(
+                    word => this.correctLetters.reduce(
+                        (prev, [letter, index]) => prev && (word[index] === letter), 
+                        true
                     )
-                } else {
-                    this.filteredList = this.FiveLetterWords.filter(
-                        word => this.correctLetters.reduce(
-                            (prev, [letter, index]) => prev && (word[index] === letter), 
-                            true
-                        )
-                    )
-                }
+                )
 
                 this.setFilteredWords(this.filteredList);
                 }
             );
           }
-
-          // this.correctLetters.forEach(
-          //   (array) => {
-          //     if (this.filteredWords.length > 1) {
-          //       this.filteredList = this.filteredWords.filter((word) => word.indexOf(array[0]) === array[1]);
-          //   } else {
-          //       this.filteredList = this.FiveLetterWords.filter((word) => word.indexOf(array[0]) === array[1]);
-          //   }
-          //   this.setFilteredWords(this.filteredList);
-          //   }
-          // );
         },
         setFilteredWords(wordsArray) {
             return this.filteredWords = _.sortBy(wordsArray);
@@ -204,8 +184,15 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+    #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin: 20px;
+    }
   /* Global resets */
   ul, li {
       margin: 0;
