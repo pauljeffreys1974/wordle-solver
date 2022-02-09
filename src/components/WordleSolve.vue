@@ -6,7 +6,7 @@
               <input 
                   type="text"
                   v-model="invalidLetters"
-                  @keyup="reduceList(false, $event)"
+                  @keyup="reduceList(false, null, $event)"
                   @keyup.delete="refreshList"
               />
           </section>
@@ -47,11 +47,28 @@
           </section>
           <section class="valid-letters">
               <span>Letters in Word, Wrong Spot</span>
-              <input 
-                  type="text"
-                  v-model="validLetters"
-                  @keyup="reduceList(true, $event)"
-              />
+              <span class="valid-letter-squares">
+                  <input 
+                      type="text"
+                      @keyup="reduceList(true, 0, $event)"
+                  />
+                  <input  
+                      type="text"
+                      @keyup="reduceList(true, 1, $event)"
+                  />
+                  <input 
+                      type="text"
+                      @keyup="reduceList(true, 2, $event)"
+                  />
+                  <input  
+                      type="text"
+                      @keyup="reduceList(true, 3, $event)"
+                  />
+                  <input 
+                      type="text"
+                      @keyup="reduceList(true, 4, $event)"
+                  />
+              </span>
           </section>
       </div>
 
@@ -93,14 +110,15 @@ export default {
         this.filteredWords =  _.sortBy(this.FiveLetterWords)
     },
     methods: {
-        reduceList(valid, e) {
+        reduceList(valid, id, e) {
             if (this.regex.test(e.key)) {
-                this.filterList(e.key, valid);
+                this.filterList(e.key, valid, id);
             }
            
         },
         refreshList() {
             const splitLetters = this.invalidLetters.split('');
+
             if (splitLetters.length === 0) {
                 window.location.reload();
             } else {
@@ -110,38 +128,56 @@ export default {
                 this.setFilteredWords(this.refreshWords);
             }
         },
-        filterList(letter, valid=false) {
-            this.filteredList = this.filteredWords.filter(
-              word => valid ? word.includes(letter) : !word.includes(letter)
-            );
+        filterList(letter, valid=false, id=null) {
+            if (this.regex.test(letter) && valid && id) {
+                this.validLetters.push([letter, id]);
+
+                console.log(this.validLetters);
+
+                this.validLetters.forEach(
+                    (array) => {
+                        this.filteredList = this.filteredWords.filter(
+                            word => {
+                                const wordSPlit = word.split('');
+                                console.log('5', wordSPlit[array[1]] !== array[0]);
+                                return word.includes(array[0]) && wordSPlit[array[1]] !== array[0]
+                            }
+                        )
+                    }
+                );
+            } else {
+                this.filteredList = this.filteredWords.filter(
+                    word => !word.includes(letter)
+                );
+            }
             this.setFilteredWords(this.filteredList);
         },
         correctList(id, e) {
           if (this.regex.test(e.key)) {
             this.correctLetters.push([e.key, id]);
+
+            this.correctLetters.forEach(
+                () => {
+                if (this.filteredWords.length > 1) {
+                    this.filteredList = this.filteredWords.filter(
+                        word => this.correctLetters.reduce(
+                            (prev, [letter, index]) => prev && (word[index] === letter), 
+                            true
+                        )
+                    )
+                } else {
+                    this.filteredList = this.FiveLetterWords.filter(
+                        word => this.correctLetters.reduce(
+                            (prev, [letter, index]) => prev && (word[index] === letter), 
+                            true
+                        )
+                    )
+                }
+
+                this.setFilteredWords(this.filteredList);
+                }
+            );
           }
-
-          this.correctLetters.forEach(
-            (array) => {
-              if (this.filteredWords.length > 1) {
-                this.filteredList = this.filteredWords.filter(
-                    (word) => {
-                        const wordSplit = word.split('');
-                        return wordSplit[array[1]] === array[0];
-                    }
-                );
-            } else {
-                this.filteredList = this.FiveLetterWords.filter(
-                    (word) => {
-                        const wordSplit = word.split('');
-                        return wordSplit[array[1]] === array[0];
-                    }
-                );
-            }
-
-            this.setFilteredWords(this.filteredList);
-            }
-          );
 
           // this.correctLetters.forEach(
           //   (array) => {
@@ -198,7 +234,8 @@ export default {
       gap: 10px;
   }
 
-  .correct-letter-squares {
+  .correct-letter-squares,
+  .valid-letter-squares {
       display: flex;
       gap: 10px;
   }
@@ -224,7 +261,8 @@ export default {
       color: yellow;
   }
 
-  .correct-letter-squares input {
+  .correct-letter-squares input,
+  .valid-letter-squares input {
       width: 36px;
   };
 </style>
