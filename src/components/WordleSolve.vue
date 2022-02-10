@@ -50,30 +50,28 @@
               <span class="valid-letter-squares">
                   <input 
                       type="text"
-                      @keyup="reduceList(true, 0, $event)"
-                  />
-                  <input  
-                      type="text"
                       @keyup="reduceList(true, 1, $event)"
                   />
-                  <input 
+                  <input  
                       type="text"
                       @keyup="reduceList(true, 2, $event)"
                   />
-                  <input  
+                  <input 
                       type="text"
                       @keyup="reduceList(true, 3, $event)"
                   />
-                  <input 
+                  <input  
                       type="text"
                       @keyup="reduceList(true, 4, $event)"
+                  />
+                  <input 
+                      type="text"
+                      @keyup="reduceList(true, 5, $event)"
                   />
               </span>
           </section>
       </div>
-
       <hr />
-      
       <!-- Five Letter Word List -->
       <ul class="wordle-words-list">
           <li
@@ -132,7 +130,10 @@ export default {
             if (this.regex.test(letter) && valid && id) {
                 this.validLetters.push([letter, id]);
 
-                console.log(this.validLetters);
+                console.log('letter', letter);
+                console.log('valid', valid);
+                console.log('id', id);
+                console.log('validLetters', this.validLetters);
 
                 this.validLetters.forEach(
                     (array) => {
@@ -140,7 +141,7 @@ export default {
                             word => {
                                 const wordSPlit = word.split('');
                                 console.log('5', wordSPlit[array[1]] !== array[0]);
-                                return word.includes(array[0]) && wordSPlit[array[1]] !== array[0]
+                                return word.includes(array[0]) && wordSPlit[array[1] - 1] !== array[0]
                             }
                         )
                     }
@@ -203,9 +204,17 @@ export default {
   /* wordle-solver */
   .wordle-solver {
       display: flex;
+      flex-direction: row;
       justify-content: center;
       gap: 20px;
   }
+    /* Mobile styles */
+    @media screen and (max-width: 800px) {
+        .wordle-solver {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
   .wordle-solver section {
       display: flex;
       justify-content: center;
