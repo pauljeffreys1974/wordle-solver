@@ -6,8 +6,8 @@
               <input 
                   type="text"
                   v-model="invalidLetters"
-                  @keyup="reduceList(false, null, $event)"
-                  @keyup.delete="refreshList"
+                  @keydown="reduceList(false, null, $event)"
+                  @keydown.delete="refreshList"
               />
           </section>
           <section class="correct-letters">
@@ -16,31 +16,31 @@
                   <input 
                       type="text"
                       id="correct-letter-one"
-                      @keyup="correctList(0, $event), jumpField(0)"
+                      @keydown="correctList(0, $event), jumpField(0)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-two"
-                      @keyup="correctList(1, $event), jumpField(1)"
+                      @keydown="correctList(1, $event), jumpField(1)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-three"
-                      @keyup="correctList(2, $event), jumpField(2)"
+                      @keydown="correctList(2, $event), jumpField(2)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-four"
-                      @keyup="correctList(3, $event), jumpField(3)"
+                      @keydown="correctList(3, $event), jumpField(3)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-five"
-                      @keyup="correctList(4, $event), jumpField(4)"
+                      @keydown="correctList(4, $event), jumpField(4)"
                       maxlength="1"
                   />
               </span>
@@ -50,23 +50,23 @@
               <span class="valid-letter-squares">
                   <input 
                       type="text"
-                      @keyup="reduceList(true, 1, $event)"
+                      @keydown="reduceList(true, 1, $event)"
                   />
                   <input  
                       type="text"
-                      @keyup="reduceList(true, 2, $event)"
+                      @keydown="reduceList(true, 2, $event)"
                   />
                   <input 
                       type="text"
-                      @keyup="reduceList(true, 3, $event)"
+                      @keydown="reduceList(true, 3, $event)"
                   />
                   <input  
                       type="text"
-                      @keyup="reduceList(true, 4, $event)"
+                      @keydown="reduceList(true, 4, $event)"
                   />
                   <input 
                       type="text"
-                      @keyup="reduceList(true, 5, $event)"
+                      @keydown="reduceList(true, 5, $event)"
                   />
               </span>
           </section>
@@ -130,17 +130,11 @@ export default {
             if (this.regex.test(letter) && valid && id) {
                 this.validLetters.push([letter, id]);
 
-                console.log('letter', letter);
-                console.log('valid', valid);
-                console.log('id', id);
-                console.log('validLetters', this.validLetters);
-
                 this.validLetters.forEach(
                     (array) => {
                         this.filteredList = this.filteredWords.filter(
                             word => {
                                 const wordSPlit = word.split('');
-                                console.log('5', wordSPlit[array[1]] !== array[0]);
                                 return word.includes(array[0]) && wordSPlit[array[1] - 1] !== array[0]
                             }
                         )
