@@ -1,72 +1,84 @@
 <template>
   <div class="wordle">
+      <div class="explainer">
+        <h2>HOW TO USE</h2>
+        <p>1) Enter any letters Wordle says aren`t in the word in the grey box on the left.</p>
+        <p>2) Enter any letters Wordle says are correct and in the right position in the corresponding position in the green boxes.</p>
+        <p>3) Enter any letters Wordle says are in the word, but not in that position in the corresponding positions in the yellow boxes on the right. You can enter more than 1 letter into each yellow slot up to a max of 5.</p>
+        <p class="example-text"><i>Example solve (this would result in only "<strong>RUSTS</strong>" being left in the word list):</i><br />
+        <img src="../assets/example.png" width="500" alt="Example of input filling" /></p>
+      </div>
       <div class="wordle-solver">
           <section class="invalid-letters"> 
-              <span>Letters Not in Word</span>
+              <span><strong>Letters Not in Word</strong></span>
               <input 
                   type="text"
                   v-model="invalidLetters"
-                  @keydown="reduceList(false, null, $event)"
-                  @keydown.delete="refreshList"
+                  @keypress="reduceList(false, null, $event)"
               />
           </section>
           <section class="correct-letters">
-              <label>Correct Letters</label>
+              <label><strong>Correct Letters</strong></label>
               <span class="correct-letter-squares">
                   <input 
                       type="text"
                       id="correct-letter-one"
-                      @keydown="correctList(0, $event), jumpField(0)"
+                      @keypress="correctList(0, $event), jumpField(0)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-two"
-                      @keydown="correctList(1, $event), jumpField(1)"
+                      @keypress="correctList(1, $event), jumpField(1)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-three"
-                      @keydown="correctList(2, $event), jumpField(2)"
+                      @keypress="correctList(2, $event), jumpField(2)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-four"
-                      @keydown="correctList(3, $event), jumpField(3)"
+                      @keypress="correctList(3, $event), jumpField(3)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-five"
-                      @keydown="correctList(4, $event), jumpField(4)"
+                      @keypress="correctList(4, $event), jumpField(4)"
                       maxlength="1"
                   />
               </span>
           </section>
           <section class="valid-letters">
-              <span>Letters in Word, Wrong Spot</span>
+              <span><strong>Letters in Word, Wrong Spot</strong></span>
               <span class="valid-letter-squares">
                   <input 
                       type="text"
-                      @keydown="reduceList(true, 1, $event)"
+                      maxlength="5"
+                      @keypress="reduceList(true, 1, $event)"
                   />
                   <input  
                       type="text"
-                      @keydown="reduceList(true, 2, $event)"
+                      maxlength="5"
+                      @keypress="reduceList(true, 2, $event)"
                   />
                   <input 
                       type="text"
-                      @keydown="reduceList(true, 3, $event)"
+                      maxlength="5"
+                      @keypress="reduceList(true, 3, $event)"
                   />
                   <input  
                       type="text"
-                      @keydown="reduceList(true, 4, $event)"
+                      maxlength="5"
+                      @keypress="reduceList(true, 4, $event)"
                   />
                   <input 
                       type="text"
-                      @keydown="reduceList(true, 5, $event)"
+                      maxlength="5"
+                      @keypress="reduceList(true, 5, $event)"
                   />
               </span>
           </section>
@@ -112,7 +124,9 @@ export default {
             if (this.regex.test(e.key)) {
                 this.filterList(e.key, valid, id);
             }
-           
+        },
+        touchStart(e) {
+            console.log(e);
         },
         refreshList() {
             const splitLetters = this.invalidLetters.split('');
@@ -181,12 +195,12 @@ export default {
 
 <style>
     #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin: 20px;
+    margin: 10px;
     }
   /* Global resets */
   ul, li {
@@ -194,6 +208,30 @@ export default {
       padding: 0;
       list-style-type: none;
   }
+    hr {
+        margin: 13px 0;
+    }
+
+    .explainer {
+        text-align: left;
+        margin: 10px 0;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #b59f3b
+    }
+
+    .explainer p {
+        margin: 6px 0;
+        padding: 0;
+    }
+    .explainer p img {
+        width: 100%;
+        max-width: 500px;
+    }
+    p.example-text {
+        margin: 8px 0 0;
+        text-align: center;
+        font-size: 0.8em;
+    }
 
   /* wordle-solver */
   .wordle-solver {
@@ -222,6 +260,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      font-size: 1.4em;
   }
 
   .correct-letter-squares,
@@ -239,20 +278,18 @@ export default {
       text-align: center;
   }
   .wordle-solver .invalid-letters input {
-      background-color: red;
-      color: white;
+      background-color: #3a3a3c;
+      color: #fff;
   }
   .wordle-solver .correct-letters input {
-      background-color: green;
-      color: white;
+      background-color: #538d4e;
+      color: #fff;
   }
   .wordle-solver .valid-letters input {
-      background-color: grey;
-      color: yellow;
+      background-color: #b59f3b;
+      color: #fff;;
   }
 
   .correct-letter-squares input,
-  .valid-letter-squares input {
-      width: 36px;
-  };
+  .valid-letter-squares input { width: 36px; };
 </style>
