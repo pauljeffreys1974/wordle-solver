@@ -174,11 +174,8 @@ export default {
           }
         },
         includesLetter(array, letter) {
-            // if(array) {
-                array.forEach(
-                    (subArray) => subArray[0] === letter
-                )
-            // }
+            const joinedArray = array.join('');
+            return joinedArray.includes(letter);
         }
     },
     watch: {
@@ -187,14 +184,9 @@ export default {
                 const splitLetters = this.invalidLetters.split('');
                 splitLetters.forEach(
                     letter => {
-                        console.log('this.correctLetters', this.correctLetters);
-                        console.log('this.validLetters', this.validLetters);
-                        const letterInCorrect = this.includesLetter(this.correctLetters, letter);
-                        const letterInValid = this.includesLetter(this.validLetters, letter);
-                        console.log('this.regex.test(letter)', this.regex.test(letter));
-                        console.log('letterInCorrect', letterInCorrect);
-                        console.log('letterInValid', letterInValid);
-                        if (this.regex.test(letter) && letterInCorrect && letterInValid) {
+                        const notInCorrect = !this.includesLetter(this.correctLetters, letter);
+                        const notInValid = !this.includesLetter(this.validLetters, letter);
+                        if (this.regex.test(letter) && notInCorrect && notInValid) {
                             return this.filterList(letter.toLowerCase(), false, null)
                         }
                     }
@@ -206,7 +198,7 @@ export default {
 </script>
 
 <style>
-    #app {
+#app {
     font-family: 'Montserrat', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -270,9 +262,16 @@ export default {
 
   .wordle-words-list {
       display: flex;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 10px;
-      font-size: 1.4em;
+      font-size: 1.8em;
+      font-weight: 300;
+      background-color: #538d4e;
+      color: #fff;
+      padding: 16px 10px;
+      border: 2px solid rgba(0,0,0,0.35);
+      box-shadow: inset 0px 0px 10px 5px rgba(0,0,0,0.35);
   }
 
   .correct-letter-squares,
@@ -304,4 +303,8 @@ export default {
 
   .correct-letter-squares input,
   .valid-letter-squares input { width: 36px; };
+
+  /* Dark Mode */
+  .dark { background-color: darkslategray; }
+  .dark #app { color: honeydew; }
 </style>
