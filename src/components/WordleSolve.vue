@@ -14,7 +14,6 @@
               <input 
                   type="text"
                   v-model="invalidLetters"
-                  @keypress="reduceList(false, null, $event)"
               />
           </section>
           <section class="correct-letters">
@@ -23,31 +22,31 @@
                   <input 
                       type="text"
                       id="correct-letter-one"
-                      @keypress="correctList(0, $event), jumpField(0)"
+                      @input="correctList(0, $event), jumpField(0)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-two"
-                      @keypress="correctList(1, $event), jumpField(1)"
+                      @input="correctList(1, $event), jumpField(1)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-three"
-                      @keypress="correctList(2, $event), jumpField(2)"
+                      @input="correctList(2, $event), jumpField(2)"
                       maxlength="1"
                   />
                   <input  
                       type="text"
                       id="correct-letter-four"
-                      @keypress="correctList(3, $event), jumpField(3)"
+                      @input="correctList(3, $event), jumpField(3)"
                       maxlength="1"
                   />
                   <input 
                       type="text"
                       id="correct-letter-five"
-                      @keypress="correctList(4, $event), jumpField(4)"
+                      @input="correctList(4, $event), jumpField(4)"
                       maxlength="1"
                   />
               </span>
@@ -58,27 +57,27 @@
                   <input 
                       type="text"
                       maxlength="5"
-                      @keypress="reduceList(true, 1, $event)"
+                      @input="reduceList(true, 1, $event)"
                   />
                   <input  
                       type="text"
                       maxlength="5"
-                      @keypress="reduceList(true, 2, $event)"
+                      @input="reduceList(true, 2, $event)"
                   />
                   <input 
                       type="text"
                       maxlength="5"
-                      @keypress="reduceList(true, 3, $event)"
+                      @input="reduceList(true, 3, $event)"
                   />
                   <input  
                       type="text"
                       maxlength="5"
-                      @keypress="reduceList(true, 4, $event)"
+                      @input="reduceList(true, 4, $event)"
                   />
                   <input 
                       type="text"
                       maxlength="5"
-                      @keypress="reduceList(true, 5, $event)"
+                      @input="reduceList(true, 5, $event)"
                   />
               </span>
           </section>
@@ -121,23 +120,8 @@ export default {
     },
     methods: {
         reduceList(valid, id, e) {
-            if (this.regex.test(e.key)) {
-                this.filterList(e.key, valid, id);
-            }
-        },
-        touchStart(e) {
-            console.log(e);
-        },
-        refreshList() {
-            const splitLetters = this.invalidLetters.split('');
-
-            if (splitLetters.length === 0) {
-                window.location.reload();
-            } else {
-                splitLetters.forEach(element => {
-                  this.refreshWords = this.filteredWords.filter(word => word.indexOf(element) < 0);
-                });
-                this.setFilteredWords(this.refreshWords);
+            if (this.regex.test(e.data)) {
+                this.filterList(e.data.toLowerCase(), valid, id);
             }
         },
         filterList(letter, valid=false, id=null) {
@@ -162,12 +146,12 @@ export default {
             this.setFilteredWords(this.filteredList);
         },
         correctList(id, e) {
-          if (this.regex.test(e.key)) {
-            this.correctLetters.push([e.key, id]);
+          if (this.regex.test(e.data)) {
+            this.correctLetters.push([e.data.toLowerCase(), id]);
 
             this.correctLetters.forEach(
                 () => {
-                this.filteredList = this.filteredWords.filter(
+                    this.filteredList = this.filteredWords.filter(
                     word => this.correctLetters.reduce(
                         (prev, [letter, index]) => prev && (word[index] === letter), 
                         true
@@ -188,6 +172,34 @@ export default {
             if (id === 4) inputFields[4].focus()
             else inputFields[id+1].focus();
           }
+        },
+        includesLetter(array, letter) {
+            // if(array) {
+                array.forEach(
+                    (subArray) => subArray[0] === letter
+                )
+            // }
+        }
+    },
+    watch: {
+        invalidLetters: function() {
+            if (this.invalidLetters.length > 0) {
+                const splitLetters = this.invalidLetters.split('');
+                splitLetters.forEach(
+                    letter => {
+                        console.log('this.correctLetters', this.correctLetters);
+                        console.log('this.validLetters', this.validLetters);
+                        const letterInCorrect = this.includesLetter(this.correctLetters, letter);
+                        const letterInValid = this.includesLetter(this.validLetters, letter);
+                        console.log('this.regex.test(letter)', this.regex.test(letter));
+                        console.log('letterInCorrect', letterInCorrect);
+                        console.log('letterInValid', letterInValid);
+                        if (this.regex.test(letter) && letterInCorrect && letterInValid) {
+                            return this.filterList(letter.toLowerCase(), false, null)
+                        }
+                    }
+                )
+            }
         }
     }
 }
