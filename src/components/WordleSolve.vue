@@ -256,10 +256,14 @@ export default {
                 this.invalidLetters.push(e.data.toLowerCase());
 
                 this.invalidLetters.forEach(
-                    () => {
-                        this.filteredList = this.filteredWords.filter(
-                        word => !word.includes(e.data)
-                    )
+                    (letter) => {
+                        const notInCorrect = !this.includesLetter(this.correctLetters, letter);
+                        const notInValid = !this.includesLetter(this.validLetters, letter);
+                        if (this.regex.test(letter) && notInCorrect && notInValid) {
+                            this.filteredList = this.filteredWords.filter(
+                                word => !word.includes(letter)
+                            )
+                        }
 
                     this.setFilteredWords(this.filteredList);
                     }
@@ -280,22 +284,6 @@ export default {
         },
         setFilteredWords(wordsArray) {
             return this.filteredWords = _.sortBy(wordsArray);
-        }
-    },
-    watch: {
-        invalidLetters: function() {
-            if (this.invalidLetters.length > 0) {
-                const splitLetters = this.invalidLetters.split('');
-                splitLetters.forEach(
-                    letter => {
-                        const notInCorrect = !this.includesLetter(this.correctLetters, letter);
-                        const notInValid = !this.includesLetter(this.validLetters, letter);
-                        if (this.regex.test(letter) && notInCorrect && notInValid) {
-                            return this.filterList(letter.toLowerCase(), false, null)
-                        }
-                    }
-                )
-            }
         }
     }
 }
