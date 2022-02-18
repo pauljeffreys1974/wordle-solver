@@ -3,13 +3,14 @@
       <div class="explainer">
         <h2>HOW TO USE</h2>
         <div class="points">
-            <p>Enter any Green box Wordle letters in the matching position in the green boxes below.</p>
-            <p>Enter any Grey box Wordle letters in the grey boxes below.</p>
-            <p>Enter any Yellow box Wordle letters in the matching positions in the yellow boxes below.<br />
-            You can enter more than 1 letter into each yellow slot up to a max of 5.</p>
-            <p>If you make a mistake and enter something by mistake, just refresh and go again.</p>
+            <p>Enter any Green Wordle letters in the matching position in the green boxes below.</p>
+            <p>Enter any Grey Wordle letters in the grey boxes below.</p>
+            <p>Enter any Yellow Wordle letters in the matching positions in the yellow boxes below.<br />
+            <span class="footnote">(You can enter more than 1 letter into each yellow slot up to a max of 5)</span></p>
+            <p>Don`t enter any letters already marked as Green or Yellow into the Grey, Wordle is confusing in this way. <br />
+            <span class="footnote">(If you do and enter something by mistake, don`t worry, just refresh and go again)</span></p>
         </div>
-        <p class="example-text"><i>Example solve (this would result in only "<strong>RUSTS</strong>" being left in the word list):</i><br />
+        <p class="example-text"><i>Example solve (this would result in only "ROSTS" & "RUSTS" being left in the word list, "<strong>RUSTS</strong>" being the most likely solution):</i><br />
         <img src="../assets/example.png" width="500" alt="Example of input filling" /></p>
       </div>
       <div class="wordle-solver">
@@ -55,36 +56,43 @@
                     type="text"
                     maxlength="1"
                     id="invalid-letter-one"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-two"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-three"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-four"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-five"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-six"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-seven"
+                    @input="removeListItems($event)"
                 />
             </span>
             <span class="invalid-letter-squares">
@@ -92,36 +100,43 @@
                     type="text"
                     maxlength="1"
                     id="invalid-letter-eight"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-nine"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-ten"
+                    @input="removeListItems($event)"
                 /> 
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-eleven"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-twelve"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-thirteen"
+                    @input="removeListItems($event)"
                 />
                 <input 
                     type="text"
                     maxlength="1"
                     id="invalid-letter-fourteen"
+                    @input="removeListItems($event)"
                 />
             </span>
         </section>
@@ -193,10 +208,23 @@ export default {
         this.filteredWords =  _.sortBy(this.FiveLetterWords)
     },
     methods: {
-        reduceList(valid, id, e) {
-            if (this.regex.test(e.data)) {
-                this.filterList(e.data.toLowerCase(), valid, id);
-            }
+        correctList(id, e) {
+          if (this.regex.test(e.data)) {
+            this.correctLetters.push([e.data.toLowerCase(), id]);
+
+            this.correctLetters.forEach(
+                () => {
+                    this.filteredList = this.filteredWords.filter(
+                    word => this.correctLetters.reduce(
+                        (prev, [letter, index]) => prev && (word[index] === letter), 
+                        true
+                    )
+                )
+
+                this.setFilteredWords(this.filteredList);
+                }
+            );
+          }
         },
         filterList(letter, valid=false, id=null) {
             if (this.regex.test(letter) && valid && id) {
@@ -219,26 +247,24 @@ export default {
             }
             this.setFilteredWords(this.filteredList);
         },
-        correctList(id, e) {
-          if (this.regex.test(e.data)) {
-            this.correctLetters.push([e.data.toLowerCase(), id]);
-
-            this.correctLetters.forEach(
-                () => {
-                    this.filteredList = this.filteredWords.filter(
-                    word => this.correctLetters.reduce(
-                        (prev, [letter, index]) => prev && (word[index] === letter), 
-                        true
-                    )
-                )
-
-                this.setFilteredWords(this.filteredList);
-                }
-            );
-          }
+        includesLetter(array, letter) {
+            const joinedArray = array.join('');
+            return joinedArray.includes(letter);
         },
-        setFilteredWords(wordsArray) {
-            return this.filteredWords = _.sortBy(wordsArray);
+        removeListItems(e) {
+            if (this.regex.test(e.data)) {
+                this.invalidLetters.push(e.data.toLowerCase());
+
+                this.invalidLetters.forEach(
+                    () => {
+                        this.filteredList = this.filteredWords.filter(
+                        word => !word.includes(e.data)
+                    )
+
+                    this.setFilteredWords(this.filteredList);
+                    }
+                );
+            }     
         },
         jumpField(id) {
           const inputFields = document.querySelectorAll("#correct-letter-one, #correct-letter-two, #correct-letter-three, #correct-letter-four, #correct-letter-five");
@@ -247,9 +273,13 @@ export default {
             else inputFields[id+1].focus();
           }
         },
-        includesLetter(array, letter) {
-            const joinedArray = array.join('');
-            return joinedArray.includes(letter);
+        reduceList(valid, id, e) {
+            if (this.regex.test(e.data)) {
+                this.filterList(e.data.toLowerCase(), valid, id);
+            }
+        },
+        setFilteredWords(wordsArray) {
+            return this.filteredWords = _.sortBy(wordsArray);
         }
     },
     watch: {
@@ -286,6 +316,10 @@ export default {
       padding: 0;
       list-style-type: none;
   }
+  .footnote {
+      font-size: 0.8rem;
+      font-style: italic;
+  }
     hr {
         margin: 13px 0;
     }
@@ -307,6 +341,7 @@ export default {
         margin: 0 3px 0 3px;
         padding: 20px 10px;
         border-right: 1px solid #b59f3b;
+        width: 25%;
     }
     .explainer .points p:nth-of-type(1) {
         margin-left: 0;
@@ -319,10 +354,10 @@ export default {
         background-color: #b59f3b;
     }
     .explainer .points p:last-of-type {
-        background-color: darkred;
         margin-right: 0;
         margin-left: 0;
         border-right: 0;
+        background-color: rgb(202, 25, 25);
     }
     .explainer h2 {
         margin: 0 0 4px;
@@ -406,11 +441,15 @@ export default {
             flex-direction: column;
             align-items: center;
         }
+        .explainer {
+            text-align: center;
+        }
         .explainer .points {
             flex-direction: column;
         }
         .explainer .points p {
             margin: 4px 0;
+            width: calc(100% - 20px);
         }
     }
 </style>
