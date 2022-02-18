@@ -2,85 +2,159 @@
   <div class="wordle">
       <div class="explainer">
         <h2>HOW TO USE</h2>
-        <p>1) Enter any letters Wordle says aren`t in the word in the grey box on the left.</p>
-        <p>2) Enter any letters Wordle says are correct and in the right position in the corresponding position in the green boxes.</p>
-        <p>3) Enter any letters Wordle says are in the word, but not in that position in the corresponding positions in the yellow boxes on the right. You can enter more than 1 letter into each yellow slot up to a max of 5.</p>
+        <div class="points">
+            <p>Enter any Green box Wordle letters in the matching position in the green boxes below.</p>
+            <p>Enter any Grey box Wordle letters in the grey boxes below.</p>
+            <p>Enter any Yellow box Wordle letters in the matching positions in the yellow boxes below.<br />
+            You can enter more than 1 letter into each yellow slot up to a max of 5.</p>
+            <p>If you make a mistake and enter something by mistake, just refresh and go again.</p>
+        </div>
         <p class="example-text"><i>Example solve (this would result in only "<strong>RUSTS</strong>" being left in the word list):</i><br />
         <img src="../assets/example.png" width="500" alt="Example of input filling" /></p>
       </div>
       <div class="wordle-solver">
-          <section class="invalid-letters"> 
-              <span><strong>Letters Not in Word</strong></span>
-              <input 
-                  type="text"
-                  v-model="invalidLetters"
-              />
-          </section>
-          <section class="correct-letters">
-              <label><strong>Correct Letters</strong></label>
-              <span class="correct-letter-squares">
-                  <input 
-                      type="text"
-                      id="correct-letter-one"
-                      @input="correctList(0, $event), jumpField(0)"
-                      maxlength="1"
-                  />
-                  <input  
-                      type="text"
-                      id="correct-letter-two"
-                      @input="correctList(1, $event), jumpField(1)"
-                      maxlength="1"
-                  />
-                  <input 
-                      type="text"
-                      id="correct-letter-three"
-                      @input="correctList(2, $event), jumpField(2)"
-                      maxlength="1"
-                  />
-                  <input  
-                      type="text"
-                      id="correct-letter-four"
-                      @input="correctList(3, $event), jumpField(3)"
-                      maxlength="1"
-                  />
-                  <input 
-                      type="text"
-                      id="correct-letter-five"
-                      @input="correctList(4, $event), jumpField(4)"
-                      maxlength="1"
-                  />
-              </span>
-          </section>
-          <section class="valid-letters">
-              <span><strong>Letters in Word, Wrong Spot</strong></span>
-              <span class="valid-letter-squares">
-                  <input 
-                      type="text"
-                      maxlength="5"
-                      @input="reduceList(true, 1, $event)"
-                  />
-                  <input  
-                      type="text"
-                      maxlength="5"
-                      @input="reduceList(true, 2, $event)"
-                  />
-                  <input 
-                      type="text"
-                      maxlength="5"
-                      @input="reduceList(true, 3, $event)"
-                  />
-                  <input  
-                      type="text"
-                      maxlength="5"
-                      @input="reduceList(true, 4, $event)"
-                  />
-                  <input 
-                      type="text"
-                      maxlength="5"
-                      @input="reduceList(true, 5, $event)"
-                  />
-              </span>
-          </section>
+        <section class="correct-letters">
+            <label><strong>Correct Letters</strong></label>
+            <span class="correct-letter-squares">
+                <input 
+                    type="text"
+                    id="correct-letter-one"
+                    @input="correctList(0, $event), jumpField(0)"
+                    maxlength="1"
+                />
+                <input  
+                    type="text"
+                    id="correct-letter-two"
+                    @input="correctList(1, $event), jumpField(1)"
+                    maxlength="1"
+                />
+                <input 
+                    type="text"
+                    id="correct-letter-three"
+                    @input="correctList(2, $event), jumpField(2)"
+                    maxlength="1"
+                />
+                <input  
+                    type="text"
+                    id="correct-letter-four"
+                    @input="correctList(3, $event), jumpField(3)"
+                    maxlength="1"
+                />
+                <input 
+                    type="text"
+                    id="correct-letter-five"
+                    @input="correctList(4, $event), jumpField(4)"
+                    maxlength="1"
+                />
+            </span>
+        </section>
+        <section class="invalid-letters"> 
+            <span><strong>Letters Not in Word</strong></span>
+            <span class="invalid-letter-squares">
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-one"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-two"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-three"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-four"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-five"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-six"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-seven"
+                />
+            </span>
+            <span class="invalid-letter-squares">
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-eight"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-nine"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-ten"
+                /> 
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-eleven"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-twelve"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-thirteen"
+                />
+                <input 
+                    type="text"
+                    maxlength="1"
+                    id="invalid-letter-fourteen"
+                />
+            </span>
+        </section>
+        <section class="valid-letters">
+            <span><strong>Letters in Word, Wrong Spot</strong></span>
+            <span class="valid-letter-squares">
+                <input 
+                    type="text"
+                    maxlength="5"
+                    @input="reduceList(true, 1, $event)"
+                />
+                <input  
+                    type="text"
+                    maxlength="5"
+                    @input="reduceList(true, 2, $event)"
+                />
+                <input 
+                    type="text"
+                    maxlength="5"
+                    @input="reduceList(true, 3, $event)"
+                />
+                <input  
+                    type="text"
+                    maxlength="5"
+                    @input="reduceList(true, 4, $event)"
+                />
+                <input 
+                    type="text"
+                    maxlength="5"
+                    @input="reduceList(true, 5, $event)"
+                />
+            </span>
+        </section>
       </div>
       <hr />
       <!-- Five Letter Word List -->
@@ -220,12 +294,39 @@ export default {
         text-align: left;
         margin: 10px 0;
         padding-bottom: 8px;
-        border-bottom: 1px solid #b59f3b
+        border-bottom: 1px solid #b59f3b;
+   }
+    .explainer .points {
+        display: flex;
+        padding: 0 0 8px;
     }
-
-    .explainer p {
-        margin: 6px 0;
-        padding: 0;
+    .explainer .points p {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #fff;
+        margin: 0 3px 0 3px;
+        padding: 20px 10px;
+        border-right: 1px solid #b59f3b;
+    }
+    .explainer .points p:nth-of-type(1) {
+        margin-left: 0;
+        background-color: #538d4e;
+    }
+    .explainer .points p:nth-of-type(2) {
+        background-color: #3a3a3c;
+    }
+    .explainer .points p:nth-of-type(3) {
+        background-color: #b59f3b;
+    }
+    .explainer .points p:last-of-type {
+        background-color: darkred;
+        margin-right: 0;
+        margin-left: 0;
+        border-right: 0;
+    }
+    .explainer h2 {
+        margin: 0 0 4px;
+        padding: 0 0 4px;
     }
     .explainer p img {
         width: 100%;
@@ -242,69 +343,74 @@ export default {
       display: flex;
       flex-direction: row;
       justify-content: center;
+      align-items: flex-start;
       gap: 20px;
   }
-    /* Mobile styles */
-    @media screen and (max-width: 800px) {
-        .wordle-solver {
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-  .wordle-solver section {
-      display: flex;
-      justify-content: center;
-      align-items: baseline;
-  }
-  .wordle-solver section {
-      flex-direction: column;
-  }
+  .wordle-solver .row {max-width: 95vw;}
 
-  .wordle-words-list {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 1.8em;
-      font-weight: 300;
-      background-color: #538d4e;
-      color: #fff;
-      padding: 16px 10px;
-      border: 2px solid rgba(0,0,0,0.35);
-      box-shadow: inset 0px 0px 10px 5px rgba(0,0,0,0.35);
-  }
+    .wordle-solver section {
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        align-items: baseline;
+
+    }
+
 
   .correct-letter-squares,
-  .valid-letter-squares {
+  .valid-letter-squares,
+  .invalid-letter-squares {
       display: flex;
       gap: 10px;
   }
+  .invalid-letter-squares { margin-bottom: 10px;}
+  .invalid-letter-squares:last-of-type { margin-bottom: 0;}
 
   .wordle-solver input {
       height: 36px;
+      width: 36px;
       border-width: 0px;
       font-size: 24px;
       padding: 4px;
       text-transform: uppercase;
       text-align: center;
+      color: #fff;
   }
   .wordle-solver .invalid-letters input {
       background-color: #3a3a3c;
-      color: #fff;
   }
   .wordle-solver .correct-letters input {
       background-color: #538d4e;
-      color: #fff;
   }
   .wordle-solver .valid-letters input {
       background-color: #b59f3b;
-      color: #fff;;
   }
 
-  .correct-letter-squares input,
-  .valid-letter-squares input { width: 36px; };
+    .wordle-words-list {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 1.8em;
+        font-weight: 300;
+        background-color: #538d4e;
+        color: #fff;
+        padding: 16px 10px;
+        border: 2px solid rgba(0,0,0,0.35);
+        box-shadow: inset 0px 0px 10px 5px rgba(0,0,0,0.35);
+    }
 
-  /* Dark Mode */
-  .dark { background-color: darkslategray; }
-  .dark #app { color: honeydew; }
+    /* Mobile styles */
+    @media screen and (max-width: 950px) {
+        .wordle-solver {
+            flex-direction: column;
+            align-items: center;
+        }
+        .explainer .points {
+            flex-direction: column;
+        }
+        .explainer .points p {
+            margin: 4px 0;
+        }
+    }
 </style>
